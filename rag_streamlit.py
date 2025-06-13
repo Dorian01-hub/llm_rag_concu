@@ -52,7 +52,7 @@ custom_prompt = PromptTemplate(
     template="""
 Vous êtes un assistant juridique spécialisé en droit de la concurrence.
 Utilisez les extraits de décisions suivants pour répondre précisément à la question posée.
-Si la réponse ne figure pas dans les documents, indiquez-le clairement.
+Si la réponse ne figure pas dans les documents, indiquez-le clairement mais indiquez si il y a des éléments en rapport avec la question.
 
 Contextes juridiques :
 {context}
