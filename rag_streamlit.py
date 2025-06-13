@@ -12,7 +12,7 @@ import os
 from langchain.chains import RetrievalQA
 import streamlit as st
 import zipfile
-
+import requests
 
 @dataclass
 class ChatMessage:
@@ -20,21 +20,47 @@ class ChatMessage:
     content: str
 
 
-# 📦 Téléchargement et extraction de ChromaDB (mis en cache)
-@st.cache_resource
+
+
+
+
+
+
+
+
+
+
+
+
+folder = "chromadb"
+file_id = "1_X2ZnuLuPsqSO2JGLbxQOY44T9JN85rB"
+url = f"https://drive.google.com/uc?id={file_id}"
+output_zip = "chromadb.zip"
+
 def download_and_extract_chromadb():
-    folder = "chromadb"
-    file_id = "1_X2ZnuLuPsqSO2JGLbxQOY44T9JN85rB"  # Ton ID Google Drive
-    url = f"https://drive.google.com/uc?id={file_id}"
-    output_zip = "chromadb.zip"
-
+    """Télécharge et extrait les données ChromaDB si absentes"""
     if not os.path.exists(folder):
-        gdown.download(url, output=output_zip, quiet=False)
-        with zipfile.ZipFile(output_zip, 'r') as zip_ref:
-            zip_ref.extractall(folder)
-        os.remove(output_zip)
+        st.info("Téléchargement des données ChromaDB...")
+        try:
+            # Télécharger le .zip depuis Google Drive
+            response = requests.get(url, stream=True)
+            response.raise_for_status()
 
-    return folder
+            with open(output_zip, "wb") as f:
+                for chunk in response.iter_content(chunk_size=8192):
+                    f.write(chunk)
+
+            # Extraire le .zip dans le dossier courant
+            with zipfile.ZipFile(output_zip, "r") as zip_ref:
+                zip_ref.extractall(".")  # Extraction dans le répertoire courant
+
+            os.remove(output_zip)
+            st.success(f"Dossier `{folder}` prêt à l'utilisation.")
+        except Exception as e:
+            st.error(f"Erreur pendant le téléchargement ou la décompression : {e}")
+    else:
+        st.info(f"Le dossier `{folder}` existe déjà.")
+    return folder  # 👈 ajoute ce retour pour que Chroma sache où chercher
 
 # 🔒 Mise en cache du modèle d'embedding
 @st.cache_resource
@@ -108,4 +134,4 @@ if query:
     for doc in qa_chain.invoke(query)['source_documents']:
         lien = doc.metadata.get("lien_pdf", "Lien inconnu")
         st.markdown(f"- **Lien** : {lien}")
-        st.markdown(f"```{doc.page_content[:500]}...```")
+       

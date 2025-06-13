@@ -7,3 +7,4 @@ mistralai>=0.1.6
 langchain_mistralai>=0.0.5
 langchain_community
 gdown>=5.1.0
+requests >=2.31.0
