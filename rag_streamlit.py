@@ -1,16 +1,17 @@
 
-from langchain.vectorstores import Chroma
+from langchain_community.vectorstores import Chroma
 from langchain.embeddings import HuggingFaceEmbeddings
 from mistralai.client import MistralClient
 from mistralai import Mistral
 from langchain_mistralai import ChatMistralAI
 from langchain.prompts import PromptTemplate
 from dataclasses import dataclass
-
+import gdown
 from langchain.chat_models.base import SimpleChatModel
 import os
 from langchain.chains import RetrievalQA
 import streamlit as st
+import zipfile
 
 
 @dataclass
@@ -19,22 +20,36 @@ class ChatMessage:
     content: str
 
 
+# 📦 Téléchargement et extraction de ChromaDB (mis en cache)
+@st.cache_resource
+def download_and_extract_chromadb():
+    folder = "chromadb"
+    file_id = "1_X2ZnuLuPsqSO2JGLbxQOY44T9JN85rB"  # Ton ID Google Drive
+    url = f"https://drive.google.com/uc?id={file_id}"
+    output_zip = "chromadb.zip"
+
+    if not os.path.exists(folder):
+        gdown.download(url, output=output_zip, quiet=False)
+        with zipfile.ZipFile(output_zip, 'r') as zip_ref:
+            zip_ref.extractall(folder)
+        os.remove(output_zip)
+
+    return folder
 
 # 🔒 Mise en cache du modèle d'embedding
 @st.cache_resource
 def get_embedding_model():
     return HuggingFaceEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2")
 
-# 🔒 Mise en cache de la base vectorielle Chroma
+# 🔒 Mise en cache de la base vectorielle
 @st.cache_resource
 def get_vectordb():
+    folder_path = download_and_extract_chromadb()
     embedding_model = get_embedding_model()
-    vectordb = Chroma(persist_directory="chromadb", embedding_function=embedding_model)
-    return vectordb
+    return Chroma(persist_directory=folder_path, embedding_function=embedding_model)
 
-# ✨ Appel des fonctions dans ton app
-embedding_model = get_embedding_model()
-retriever = get_vectordb().as_retriever(search_kwargs={"k": 3})
+
+
 
 
 

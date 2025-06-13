@@ -5,4 +5,5 @@ chromadb>=0.4.22
 sentence-transformers>=2.2.2
 mistralai>=0.1.6
 langchain_mistralai>=0.0.5
-langchain_community>=0.0.21;
+langchain_community
+gdown>=5.1.0
