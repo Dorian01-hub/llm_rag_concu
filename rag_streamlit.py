@@ -49,6 +49,9 @@ def get_vectordb():
     return Chroma(persist_directory=folder_path, embedding_function=embedding_model)
 
 
+# ✨ Appel des fonctions dans ton app
+embedding_model = get_embedding_model()
+retriever = get_vectordb().as_retriever(search_kwargs={"k": 3})
 
 
 
