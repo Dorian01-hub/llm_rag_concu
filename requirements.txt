@@ -9,3 +9,4 @@ langchain_community
 gdown>=5.1.0
 requests >=2.31.0
 protobuf==3.20.*
+sqlite3 >= 3.35.0
