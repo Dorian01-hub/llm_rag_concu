@@ -33,7 +33,7 @@ destination = "chromadb"
 
 
 def download_and_extract_chromadb():
-    if  os.path.exists(destination):
+    if not os.path.exists(destination):
         print("📦 Téléchargement des données ChromaDB...")
 
         try:
