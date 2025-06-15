@@ -1,10 +1,31 @@
-langchain==0.1.13
-langchain_community==0.0.34  # tu peux adapter à la version que tu utilises localement
-streamlit==1.32.0
-chromadb==0.4.22
-sentence-transformers==2.2.2
-mistralai==0.1.6
-langchain_mistralai==0.0.5
-requests==2.31.0
+# 🧠 Langchain et intégrations
+langchain>=0.1.13
+langchain_community>=0.0.29
+langchain_mistralai>=0.0.5
 
-gdown==5.1.0 
+# 🧠 Embeddings
+sentence-transformers>=2.2.2
+
+# 📦 ChromaDB pour la base vectorielle
+chromadb>=0.4.22
+
+# 🤖 Client Mistral
+mistralai>=0.1.6
+
+# 📦 Téléchargement GDrive
+gdown>=5.1.0
+
+# 🌐 Requêtes HTTP
+requests>=2.31.0
+
+# 🐍 Interface web
+streamlit>=1.32.0
+
+# 🔄 Compatibilité protobuf
+protobuf==3.20.*
+
+# 🔧 Pour éviter certains conflits d'affichage
+markdown-it-py==3.0.0
+mdurl==0.1.2
+rich==14.0.0
+pygments==2.19.1
