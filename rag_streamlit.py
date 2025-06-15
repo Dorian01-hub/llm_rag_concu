@@ -23,44 +23,41 @@ class ChatMessage:
 
 
 
-
-
-
-
-
-
-
-
-
 folder = "chromadb"
 file_id = "1_X2ZnuLuPsqSO2JGLbxQOY44T9JN85rB"
 url = f"https://drive.google.com/uc?id={file_id}"
 output_zip = "chromadb.zip"
+destination = "chromadb"
+
+
+
 
 def download_and_extract_chromadb():
-    """Télécharge et extrait les données ChromaDB si absentes"""
-    if not os.path.exists(folder):
-        st.info("Téléchargement des données ChromaDB...")
+    if  os.path.exists(destination):
+        print("📦 Téléchargement des données ChromaDB...")
+
         try:
-            # Télécharger le .zip depuis Google Drive
-            response = requests.get(url, stream=True)
-            response.raise_for_status()
+            # Utiliser gdown à la place de requests
+            gdown.download(url, output=output_zip, quiet=False)
 
-            with open(output_zip, "wb") as f:
-                for chunk in response.iter_content(chunk_size=8192):
-                    f.write(chunk)
-
-            # Extraire le .zip dans le dossier courant
+            # Décompression
             with zipfile.ZipFile(output_zip, "r") as zip_ref:
-                zip_ref.extractall(".")  # Extraction dans le répertoire courant
+                zip_ref.extractall(".")
 
             os.remove(output_zip)
-            st.success(f"Dossier `{folder}` prêt à l'utilisation.")
+            print(f"✅ Dossier extrait dans `{destination}`")
         except Exception as e:
-            st.error(f"Erreur pendant le téléchargement ou la décompression : {e}")
+            print(f"❌ Erreur pendant le téléchargement ou la décompression : {e}")
     else:
-        st.info(f"Le dossier `{folder}` existe déjà.")
-    return folder  # 👈 ajoute ce retour pour que Chroma sache où chercher
+        print(f"📁 Le dossier `{destination}` existe déjà.")
+
+    return destination
+
+
+    
+
+
+
 
 # 🔒 Mise en cache du modèle d'embedding
 @st.cache_resource
@@ -70,9 +67,12 @@ def get_embedding_model():
 # 🔒 Mise en cache de la base vectorielle
 @st.cache_resource
 def get_vectordb():
-    folder_path = download_and_extract_chromadb()
-    embedding_model = get_embedding_model()
-    return Chroma(persist_directory=folder_path, embedding_function=embedding_model)
+    # Lancer la fonction
+   if __name__ == "__main__":
+        folder_path = download_and_extract_chromadb()
+        print(f"📂 Chemin utilisé : {folder_path}")
+        embedding_model = get_embedding_model()
+        return Chroma(persist_directory=folder_path, embedding_function=embedding_model)
 
 
 # ✨ Appel des fonctions dans ton app
