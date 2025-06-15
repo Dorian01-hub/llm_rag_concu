@@ -1,12 +1,10 @@
-
-langchain>=0.1.13
-streamlit>=1.32.0
-chromadb>=0.4.22
-sentence-transformers>=2.2.2
-mistralai>=0.1.6
-langchain_mistralai>=0.0.5
-langchain_community
-gdown>=5.1.0
-requests >=2.31.0
-protobuf==3.20.*
-sqlite3 >= 3.35.0
+langchain==0.1.13
+langchain_community==0.0.34  # tu peux adapter à la version que tu utilises localement
+streamlit==1.32.0
+chromadb==0.4.22
+sentence-transformers==2.2.2
+mistralai==0.1.6
+langchain_mistralai==0.0.5
+requests==2.31.0
+protobuf==3.20.3  # version connue stable
+gdown==5.1.0 
